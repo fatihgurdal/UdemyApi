@@ -12,14 +12,26 @@ namespace UdemyApi.UI.Console
 
             ServiceUtil serviceUtil = new ServiceUtil(args[0]); //https://www.udemy.com/instructor/account/api/ Generate Instructor API Token
 
-            var questions = serviceUtil.GetCourseQuestions("1287382"); //Course Id
-
-            foreach (var item in questions)
+            #region Kurslarım
+            var courses = serviceUtil.GetMyCourses(); 
+            foreach (var item in courses)
             {
                 System.Console.WriteLine(item.ToString());
                 System.Console.WriteLine(new string('-', 30));
                 System.Console.WriteLine("");
             }
+            #endregion
+
+            #region - Bir kurusun soruları -
+            //var questions = serviceUtil.GetCourseQuestions("1287382"); //Course Id
+
+            //foreach (var item in questions)
+            //{
+            //    System.Console.WriteLine(item.ToString());
+            //    System.Console.WriteLine(new string('-', 30));
+            //    System.Console.WriteLine("");
+            //} 
+            #endregion
 
             System.Console.ReadKey();
 

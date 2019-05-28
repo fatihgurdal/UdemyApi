@@ -27,13 +27,45 @@ namespace UdemyApi.Core
             var handle = client.Execute(request);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(handle.Content);
         }
+        
+        #region GetCourseQuestions
+        /// <summary>
+        /// Bir kursa gelmiş soruları listeler
+        /// </summary>
+        /// <param name="courseId">Kursun benzersiz numarası</param>
+        /// <returns></returns>
         public UdemyRootModel<List<Question>> GetCourseQuestionsRoot(string courseId)
         {
             return SendRequest<UdemyRootModel<List<Question>>>(string.Format(Endpoints.CourseQuestions, courseId), Method.GET);
         }
+        /// <summary>
+        /// Bir kursa gelmiş soruları listeler
+        /// </summary>
+        /// <param name="courseId">Kursun benzersiz numarası</param>
+        /// <returns></returns>
         public List<Question> GetCourseQuestions(string courseId)
         {
             return GetCourseQuestionsRoot(courseId).results;
         }
+        #endregion
+
+        #region GetMyCourses
+        /// <summary>
+        /// Verdiğim eğitimleri listeler
+        /// </summary>
+        /// <returns></returns>
+        public UdemyRootModel<List<Course>> GetMyCoursesRoot()
+        {
+            return SendRequest<UdemyRootModel<List<Course>>>(Endpoints.MyCourses, Method.GET);
+        }
+        /// <summary>
+        /// Verdiğim eğitimleri listeler
+        /// </summary>
+        /// <returns></returns>
+        public List<Course> GetMyCourses()
+        {
+            return GetMyCoursesRoot().results;
+        } 
+        #endregion
     }
 }
