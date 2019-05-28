@@ -18,8 +18,12 @@ namespace UdemyApi.Core
             this.Token = token;
             client = new RestClient(UdemyApiPrefix);
         }
-        public T SendRequest<T>(string url,Method method) where T : new()
+        public T SendRequest<T>(string url, string filters, Method method) where T : new()
         {
+            if (!string.IsNullOrWhiteSpace(filters))
+            {
+                url += "?" + filters;
+            }
             RestSharp.RestRequest request = new RestSharp.RestRequest(url, method);
             request.JsonSerializer = new NewtonsoftJsonSerializer();
             request.AddHeader("Authorization", $"bearer {Token}");
@@ -27,25 +31,25 @@ namespace UdemyApi.Core
             var handle = client.Execute(request);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(handle.Content);
         }
-        
+
         #region GetCourseQuestions
         /// <summary>
         /// Bir kursa gelmiş soruları listeler
         /// </summary>
         /// <param name="courseId">Kursun benzersiz numarası</param>
         /// <returns></returns>
-        public UdemyRootModel<List<Question>> GetCourseQuestionsRoot(string courseId)
+        public UdemyRootModel<List<Question>> GetCourseQuestionsRoot(string courseId, string filters = "")
         {
-            return SendRequest<UdemyRootModel<List<Question>>>(string.Format(Endpoints.CourseQuestions, courseId), Method.GET);
+            return SendRequest<UdemyRootModel<List<Question>>>(string.Format(Endpoints.CourseQuestions, courseId), filters, Method.GET);
         }
         /// <summary>
         /// Bir kursa gelmiş soruları listeler
         /// </summary>
         /// <param name="courseId">Kursun benzersiz numarası</param>
         /// <returns></returns>
-        public List<Question> GetCourseQuestions(string courseId)
+        public List<Question> GetCourseQuestions(string courseId, string filters = "")
         {
-            return GetCourseQuestionsRoot(courseId).results;
+            return GetCourseQuestionsRoot(courseId, filters).results;
         }
         #endregion
 
@@ -54,18 +58,18 @@ namespace UdemyApi.Core
         /// Verdiğim eğitimleri listeler
         /// </summary>
         /// <returns></returns>
-        public UdemyRootModel<List<Course>> GetMyCoursesRoot()
+        public UdemyRootModel<List<Course>> GetMyCoursesRoot(string filters = "")
         {
-            return SendRequest<UdemyRootModel<List<Course>>>(Endpoints.MyCourses, Method.GET);
+            return SendRequest<UdemyRootModel<List<Course>>>(Endpoints.MyCourses, filters, Method.GET);
         }
         /// <summary>
         /// Verdiğim eğitimleri listeler
         /// </summary>
         /// <returns></returns>
-        public List<Course> GetMyCourses()
+        public List<Course> GetMyCourses(string filters = "")
         {
-            return GetMyCoursesRoot().results;
-        } 
+            return GetMyCoursesRoot(filters).results;
+        }
         #endregion
     }
 }

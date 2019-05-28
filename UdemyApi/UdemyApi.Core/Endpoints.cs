@@ -6,7 +6,7 @@ namespace UdemyApi.Core
 {
     public class Endpoints
     {
-        public const string CourseQuestions = "courses/{0}/questions/";
-        public const string MyCourses = "taught-courses/courses/";
+        public const string CourseQuestions = "courses/{0}/questions";
+        public const string MyCourses = "taught-courses/courses";
     }
 }

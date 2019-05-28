@@ -13,7 +13,7 @@ namespace UdemyApi.UI.Console
             ServiceUtil serviceUtil = new ServiceUtil(args[0]); //https://www.udemy.com/instructor/account/api/ Generate Instructor API Token
 
             #region Kurslarım
-            var courses = serviceUtil.GetMyCourses(); 
+            var courses = serviceUtil.GetMyCourses($"{FilterParams.Course}={ReadyParam.All}&{FilterParams.User}={ReadyParam.All}"); 
             foreach (var item in courses)
             {
                 System.Console.WriteLine(item.ToString());
