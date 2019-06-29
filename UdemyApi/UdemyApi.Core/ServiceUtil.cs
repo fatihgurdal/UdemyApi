@@ -22,7 +22,7 @@ namespace UdemyApi.Core
         {
             if (!string.IsNullOrWhiteSpace(filters))
             {
-                url += "?" + filters;
+                url += "?" + filters.Trim('&');
             }
             RestSharp.RestRequest request = new RestSharp.RestRequest(url, method);
             request.JsonSerializer = new NewtonsoftJsonSerializer();
@@ -38,18 +38,30 @@ namespace UdemyApi.Core
         /// </summary>
         /// <param name="courseId">Kursun benzersiz numarası</param>
         /// <returns></returns>
-        public UdemyRootModel<List<Question>> GetCourseQuestionsRoot(string courseId, string filters = "")
+        public UdemyRootModel<List<Question>> GetCourseQuestionsRoot(string courseId, string filters, int page, int pageSize)
         {
+            filters += $"&page={page}&page_size={pageSize}";
             return SendRequest<UdemyRootModel<List<Question>>>(string.Format(Endpoints.CourseQuestions, courseId), filters, Method.GET);
         }
         /// <summary>
         /// Bir kursa gelmiş soruları listeler
         /// </summary>
         /// <param name="courseId">Kursun benzersiz numarası</param>
+        /// <param name="filters">İlişkili nesneleri doldurma filtrelemleri</param>
         /// <returns></returns>
-        public List<Question> GetCourseQuestions(string courseId, string filters = "")
+        public List<Question> GetCourseQuestions(string courseId, string filters, int page, int pageSize)
         {
-            return GetCourseQuestionsRoot(courseId, filters).results;
+            return GetCourseQuestionsRoot(courseId, filters, page, pageSize).results;
+        }
+        /// <summary>
+        /// Bir kursa gelmiş soruları listeler
+        /// </summary>
+        /// <param name="courseId">Kursun benzersiz numarası</param>
+        /// <returns></returns>
+        public List<Question> GetCourseQuestions(string courseId, int page, int pageSize)
+        {
+            var filters = $"{FilterParams.Question}={ReadyParam.All}&{FilterParams.Answer}={ReadyParam.All}&{FilterParams.User}={ReadyParam.All}";
+            return GetCourseQuestionsRoot(courseId, filters, page, pageSize).results;
         }
         #endregion
 
